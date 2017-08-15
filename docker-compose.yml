@@ -1,1 +1,27 @@
-version: '3'
+version: '3.2'
+
+services:
+  users.db:
+    container_name: users.db
+    build: ./users.db
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=example
+      - POSTGRES_PASSWORD=example
+    healthcheck:
+      test: exit 0
+    networks:
+      - example.microservice.1
+  users.service:
+    container_name: users.service
+    build: ./users.service
+    ports:
+      - 31000:8080
+    links:
+      - users.db
+    networks:
+      - example.microservice.1
+
+networks:
+  example.microservice.1:
+    driver: bridge
