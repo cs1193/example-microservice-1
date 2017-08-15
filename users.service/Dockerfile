@@ -2,19 +2,27 @@ FROM node:latest
 
 MAINTAINER Chandresh Rajkumar Manonmani <chandresh.rm@gmail.com> <cs1193@gmail.com> (http://chandreshrm.name)
 
-# Create app directory
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# COPY package.json .
-# For npm@5 or later, copy package-lock.json as well
-COPY package.json .
-COPY package-lock.json .
-
+COPY package.json /usr/src/app
+COPY package-lock.json /usr/src/app
 RUN npm install
 
-# Bundle app source
-COPY . .
+ENV HOST 0.0.0.0
+ENV PORT 3000
 
-EXPOSE 8080
-CMD [ "npm", "start" ]
+ENV DATASTORE_HOST users.db
+ENV DATASTORE_PORT 27017
+ENV DATASTORE_NAME users
+
+ENV SECRET_KEY 875ada1df066b1bddb31ed41a4c68cd9
+
+COPY . /usr/src/app
+
+EXPOSE 3000
+
+RUN npm run test
+RUN npm run build
+
+CMD ["npm", "run", "start"]
