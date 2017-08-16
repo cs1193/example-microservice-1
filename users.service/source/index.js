@@ -11,7 +11,7 @@ process.on('uncaughtRejection', (error, promise) => {
 });
 
 reporter.on('database.ready', (database) => {
-
+  console.log('Database Ready');
 });
 
 reporter.on('database.error', (error) => {
